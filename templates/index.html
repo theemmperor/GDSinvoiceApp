@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Invoice Proposal System</h1>
-        
+
         <form action="{{ url_for('preview') }}" method="POST" enctype="multipart/form-data">
             <!-- Company Information -->
             <div class="form-group">
@@ -17,21 +17,12 @@
                 <label for="company-logo">Company Logo:</label>
                 <input type="file" id="company-logo" name="company-logo" accept="image/*" onchange="handleImagePreview(this)">
                 <img id="logo-preview" class="image-preview" style="display: none;">
-                
+
                 <label for="company-name">Company Name:</label>
                 <input type="text" id="company-name" name="company-name" required>
-                
+
                 <label for="company-address">Company Address:</label>
                 <textarea id="company-address" name="company-address" required></textarea>
-            </div>
-
-            <!-- Customer Information -->
-            <div class="form-group">
-                <h2>Customer Information</h2>
-                <label for="customer-select">Select Customer:</label>
-                <select id="customer-select" name="customer-select" required>
-                    <option value="">Select a customer...</option>
-                </select>
             </div>
 
             <!-- Invoice Details -->
@@ -39,21 +30,21 @@
                 <h2>Invoice Details</h2>
                 <label for="invoice-number">Invoice Number:</label>
                 <input type="text" id="invoice-number" name="invoice-number" required>
-                
+
                 <label for="invoice-date">Invoice Date:</label>
                 <input type="date" id="invoice-date" name="invoice-date" required>
-                
+
                 <label for="product-select">Select Product:</label>
                 <select id="product-select" name="product-select" required>
                     <option value="">Select a product...</option>
                 </select>
-                
+
                 <label for="quantity">Quantity:</label>
                 <input type="number" id="quantity" name="quantity" min="1" required>
-                
-                <label for="unit-price">Unit Price:</label>
+
+                <label for="unit-price">Unit Price (USD):</label>
                 <input type="number" id="unit-price" name="unit-price" step="0.01" required>
-                
+
                 <label for="total-amount">Total Amount:</label>
                 <input type="text" id="total-amount" name="total-amount" readonly>
             </div>
@@ -67,7 +58,7 @@
             <button type="submit" class="btn">Preview Invoice</button>
         </form>
     </div>
-    
+
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

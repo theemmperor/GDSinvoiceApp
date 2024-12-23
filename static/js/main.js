@@ -1,9 +1,9 @@
 // Handle Excel data loading
 async function loadExcelData() {
     try {
-        const response = await fetch('/get_excel_data');
+        const response = await fetch('/get_product_data');
         const data = await response.json();
-        
+
         if (data.success) {
             populateFormFields(data.data);
         } else {
@@ -17,22 +17,26 @@ async function loadExcelData() {
 // Populate form fields with Excel data
 function populateFormFields(data) {
     const productSelect = document.getElementById('product-select');
-    const customerSelect = document.getElementById('customer-select');
-    
+
+    // Clear existing options
+    productSelect.innerHTML = '<option value="">Select a product...</option>';
+
     // Populate products dropdown
-    data.products.forEach(product => {
+    data.screw_presses.forEach(product => {
         const option = document.createElement('option');
-        option.value = product.id;
-        option.textContent = `${product.name} - $${product.price}`;
+        option.value = product['Mivalt Part Number'];
+        option.textContent = `${product['Item Name (MD 300 Series)']} - ${product['Manufacturer']}`;
+        option.dataset.price = product['Cost USD'];
         productSelect.appendChild(option);
     });
-    
-    // Populate customers dropdown
-    data.customers.forEach(customer => {
-        const option = document.createElement('option');
-        option.value = customer.id;
-        option.textContent = customer.name;
-        customerSelect.appendChild(option);
+
+    // Add change event to update price when product is selected
+    productSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        if (selectedOption.dataset.price) {
+            document.getElementById('unit-price').value = selectedOption.dataset.price;
+            calculateTotal();
+        }
     });
 }
 
@@ -40,7 +44,7 @@ function populateFormFields(data) {
 function handleImagePreview(input) {
     const preview = document.getElementById('logo-preview');
     const file = input.files[0];
-    
+
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -62,7 +66,7 @@ function calculateTotal() {
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
     loadExcelData();
-    
+
     // Add event listeners
     document.getElementById('quantity').addEventListener('change', calculateTotal);
     document.getElementById('unit-price').addEventListener('change', calculateTotal);
