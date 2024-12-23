@@ -82,6 +82,7 @@ function populateFormFields(data) {
         option.dataset.power = product['Power'] || '-';
         option.dataset.material = product['Material'] || '-';
         option.dataset.leadTime = product['Lead Time'] || '-';
+        option.dataset.costEuro = (parseFloat(product['Cost (Euro)']) || 0).toFixed(2);
         option.dataset.costUsd = (parseFloat(product['Cost USD']) || 0).toFixed(2);
 
         productSelect.appendChild(option);
@@ -125,6 +126,7 @@ function updateProductDetails(event) {
         updateElement('power', selectedOption.dataset.power);
         updateElement('material', selectedOption.dataset.material);
         updateElement('lead-time', selectedOption.dataset.leadTime);
+        updateElement('cost-euro', selectedOption.dataset.costEuro);
         updateElement('unit-price', selectedOption.dataset.costUsd);
         calculateTotal();
     } else {
@@ -132,6 +134,7 @@ function updateProductDetails(event) {
         ['manufacturer', 'part-number', 'gds-part-no', 'power', 'material', 'lead-time'].forEach(id => {
             updateElement(id, '-');
         });
+        updateElement('cost-euro', '');
         updateElement('unit-price', '');
         updateElement('total-amount', '');
     }
