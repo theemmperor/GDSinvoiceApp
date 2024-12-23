@@ -11,33 +11,59 @@
         <h1>Screw Press Invoice System</h1>
 
         <form action="{{ url_for('preview') }}" method="POST" enctype="multipart/form-data">
-            <!-- Product Selection -->
             <div class="form-group">
                 <label for="product-select">Select Screw Press:</label>
                 <select id="product-select" name="product-select" required>
                     <option value="">Select a screw press...</option>
                 </select>
 
-                <div id="product-details" class="product-info">
-                    <p>Manufacturer: <span id="manufacturer">-</span></p>
-                    <p>Part Number: <span id="part-number">-</span></p>
-                    <p>GDS Part No: <span id="gds-part-no">-</span></p>
-                    <p>Power: <span id="power">-</span></p>
-                    <p>Material: <span id="material">-</span></p>
-                    <p>Lead Time: <span id="lead-time">-</span></p>
+                <div class="product-info">
+                    <div class="product-info-grid">
+                        <div class="grid-item">
+                            <span class="grid-label">Manufacturer:</span>
+                            <span id="manufacturer" class="grid-value">-</span>
+                        </div>
+                        <div class="grid-item">
+                            <span class="grid-label">Part Number:</span>
+                            <span id="part-number" class="grid-value">-</span>
+                        </div>
+                        <div class="grid-item">
+                            <span class="grid-label">GDS Part No:</span>
+                            <span id="gds-part-no" class="grid-value">-</span>
+                        </div>
+                        <div class="grid-item">
+                            <span class="grid-label">Power:</span>
+                            <span id="power" class="grid-value">-</span>
+                        </div>
+                        <div class="grid-item">
+                            <span class="grid-label">Material:</span>
+                            <span id="material" class="grid-value">-</span>
+                        </div>
+                        <div class="grid-item">
+                            <span class="grid-label">Lead Time:</span>
+                            <span id="lead-time" class="grid-value">-</span>
+                        </div>
+                    </div>
                 </div>
 
-                <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity" name="quantity" min="1" required>
-
-                <label for="cost-euro">Cost (Euros):</label>
-                <input type="number" id="cost-euro" name="cost-euro" step="0.01" required readonly>
-
-                <label for="unit-price">Unit Price (USD):</label>
-                <input type="number" id="unit-price" name="unit-price" step="0.01" required readonly>
-
-                <label for="total-amount">Total Amount:</label>
-                <input type="text" id="total-amount" name="total-amount" readonly>
+                <div class="numeric-inputs">
+                    <div>
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" min="1" required>
+                    </div>
+                    <div>
+                        <label for="cost-euro">Cost (Euros):</label>
+                        <input type="number" id="cost-euro" name="cost-euro" step="0.01" required readonly>
+                    </div>
+                    <div>
+                        <label for="unit-price">Unit Price (USD):</label>
+                        <input type="number" id="unit-price" name="unit-price" step="0.01" required readonly>
+                    </div>
+                    <div>
+                        <label for="total-amount">Total Amount:</label>
+                        <input type="text" id="total-amount" name="total-amount" readonly>
+                    </div>
+                </div>
             </div>
 
             <button type="submit" class="btn">Preview Invoice</button>

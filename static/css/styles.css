@@ -16,82 +16,104 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
+h1 {
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
 /* Form styling */
 .form-group {
     margin-bottom: 20px;
 }
 
+/* Excel-like table styling */
+.product-info {
+    border: 1px solid #d4d4d4;
+    margin: 20px 0;
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.product-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: #d4d4d4;
+}
+
+.grid-item {
+    padding: 10px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+}
+
+.grid-item:nth-child(4n+1),
+.grid-item:nth-child(4n+2) {
+    background: #f8f9fa;
+}
+
+.grid-item:hover {
+    background: #e8f4f9;
+}
+
+.grid-label {
+    font-weight: bold;
+    color: #333;
+    width: 120px;
+}
+
+.grid-value {
+    color: #666;
+    flex-grow: 1;
+}
+
+/* Input fields */
+select,
+input[type="number"],
+input[type="text"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d4d4d4;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+select {
+    margin-bottom: 15px;
+}
+
+/* Read-only inputs */
+input[readonly] {
+    background-color: #f8f9fa;
+    cursor: default;
+}
+
+/* Labels */
 label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
+    color: #333;
 }
 
-input[type="text"],
-input[type="number"],
-select,
-textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-/* Image preview */
-.image-preview {
-    max-width: 200px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    padding: 5px;
-}
-
-/* Buttons */
+/* Button styling */
 .btn {
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #0078d4;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
 }
 
 .btn:hover {
-    background-color: #0056b3;
-}
-
-/* Preview section */
-.preview-container {
-    margin-top: 20px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    background-color: #fff;
-}
-
-/* Invoice specific styling */
-.invoice-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-}
-
-.invoice-items {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-}
-
-.invoice-items th,
-.invoice-items td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-.invoice-total {
-    text-align: right;
-    margin-top: 20px;
-    font-weight: bold;
+    background-color: #106ebe;
 }
 
 /* Error message styling */
@@ -103,6 +125,29 @@ textarea {
     margin: 10px 0;
     border-radius: 4px;
     font-size: 14px;
-    line-height: 1.4;
-    white-space: pre-line;
+}
+
+/* Quantity and price inputs container */
+.numeric-inputs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.numeric-inputs div {
+    display: flex;
+    flex-direction: column;
+}
+
+.numeric-inputs input {
+    text-align: right;
+}
+
+/* Image preview */
+.image-preview {
+    max-width: 200px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    padding: 5px;
 }
