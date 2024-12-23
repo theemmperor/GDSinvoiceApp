@@ -16,8 +16,7 @@ class ScrewPressHandler:
             "Lead Time",
             "Cost (Euro)",
             "Cost USD",
-            "Customer 100%",
-            "Customer 100% 2"  # Added second Customer 100% column
+            "Customer 100%"
         }
 
     def read_sheet_data(self):
@@ -28,9 +27,9 @@ class ScrewPressHandler:
         if not self.file_path.exists():
             sample_data = (
                 "Example data format:\n"
-                "| Item Name (MD 300 Series) | Manufacturer | Mivalt Part Number | GDS Part No | Power | Material | Lead Time | Cost (Euro) | Cost USD | Customer 100% | Customer 100% 2 |\n"
-                "|---------------------------|--------------|-------------------|-------------|-------|----------|-----------|-------------|-----------|---------------|----------------|\n"
-                "| Screw Press Model A       | ACME Corp    | MVT-001           | GDS-001     | 500W  | Steel    | 2 weeks   | 1000        | 1200     | 2000          | 2500           |"
+                "| Item Name (MD 300 Series) | Manufacturer | Mivalt Part Number | GDS Part No | Power | Material | Lead Time | Cost (Euro) | Cost USD | Customer 100% |\n"
+                "|---------------------------|--------------|-------------------|-------------|-------|----------|-----------|-------------|-----------|---------------|\n"
+                "| Screw Press Model A       | ACME Corp    | MVT-001           | GDS-001     | 500W  | Steel    | 2 weeks   | 1000        | 1200     | 2000          |"
             )
             raise FileNotFoundError(
                 f"Excel file not found at: {self.file_path}\n"
