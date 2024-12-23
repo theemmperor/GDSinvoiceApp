@@ -5,7 +5,6 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
-screw_press_handler = ScrewPressHandler()
 
 # Configure upload folders for macOS
 IMAGE_FOLDER = os.path.expanduser('~/Desktop/invoice_images')
@@ -22,10 +21,21 @@ def index():
 @app.route('/get_product_data')
 def get_product_data():
     try:
+        screw_press_handler = ScrewPressHandler()
         data = screw_press_handler.read_sheet_data()
         return jsonify({"success": True, "data": data})
+    except FileNotFoundError as e:
+        app.logger.error(f"Excel file not found: {str(e)}")
+        return jsonify({
+            "success": False, 
+            "error": str(e)
+        }), 404
     except Exception as e:
-        return jsonify({"success": False, "error": str(e)})
+        app.logger.error(f"Error processing Excel data: {str(e)}")
+        return jsonify({
+            "success": False,
+            "error": f"Error processing Excel data: {str(e)}"
+        }), 500
 
 @app.route('/preview', methods=['POST'])
 def preview():

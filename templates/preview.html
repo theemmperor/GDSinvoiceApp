@@ -30,7 +30,11 @@
                     <tr>
                         <th>Screw Press</th>
                         <th>Part Number</th>
+                        <th>GDS Part No</th>
                         <th>Manufacturer</th>
+                        <th>Power</th>
+                        <th>Material</th>
+                        <th>Lead Time</th>
                         <th>Quantity</th>
                         <th>Unit Price (USD)</th>
                         <th>Total</th>
@@ -40,7 +44,11 @@
                     <tr>
                         <td>{{ data['product-select'] }}</td>
                         <td>{{ data['part-number'] }}</td>
+                        <td>{{ data['gds-part-no'] }}</td>
                         <td>{{ data['manufacturer'] }}</td>
+                        <td>{{ data['power'] }}</td>
+                        <td>{{ data['material'] }}</td>
+                        <td>{{ data['lead-time'] }}</td>
                         <td>{{ data['quantity'] }}</td>
                         <td>${{ data['unit-price'] }}</td>
                         <td>${{ data['total-amount'] }}</td>

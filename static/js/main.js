@@ -40,9 +40,13 @@ function populateFormFields(data) {
         option.value = product['Mivalt Part Number'];
         option.textContent = `${product['Item Name (MD 300 Series)']}`;
         // Store all product details in dataset
-        Object.keys(product).forEach(key => {
-            option.dataset[key.toLowerCase().replace(/[()]/g, '').replace(/\s+/g, '_')] = product[key];
-        });
+        option.dataset.manufacturer = product['Manufacturer'];
+        option.dataset.partNumber = product['Mivalt Part Number'];
+        option.dataset.gdsPartNo = product['GDS Part No'];
+        option.dataset.power = product['Power'];
+        option.dataset.material = product['Material'];
+        option.dataset.leadTime = product['Lead Time'];
+        option.dataset.costUsd = product['Cost USD'];
         productSelect.appendChild(option);
     });
 
@@ -57,15 +61,16 @@ function populateFormFields(data) {
 function updateProductDetails(selectedOption) {
     if (selectedOption.value) {
         document.getElementById('manufacturer').textContent = selectedOption.dataset.manufacturer || '-';
-        document.getElementById('part-number').textContent = selectedOption.dataset.mivalt_part_number || '-';
-        document.getElementById('material').textContent = selectedOption.dataset.material || '-';
+        document.getElementById('part-number').textContent = selectedOption.dataset.partNumber || '-';
+        document.getElementById('gds-part-no').textContent = selectedOption.dataset.gdsPartNo || '-';
         document.getElementById('power').textContent = selectedOption.dataset.power || '-';
-        document.getElementById('lead-time').textContent = selectedOption.dataset.lead_time || '-';
-        document.getElementById('unit-price').value = selectedOption.dataset.cost_usd || '';
+        document.getElementById('material').textContent = selectedOption.dataset.material || '-';
+        document.getElementById('lead-time').textContent = selectedOption.dataset.leadTime || '-';
+        document.getElementById('unit-price').value = selectedOption.dataset.costUsd || '';
         calculateTotal();
     } else {
         // Reset fields if no option selected
-        ['manufacturer', 'part-number', 'material', 'power', 'lead-time'].forEach(id => {
+        ['manufacturer', 'part-number', 'gds-part-no', 'power', 'material', 'lead-time'].forEach(id => {
             document.getElementById(id).textContent = '-';
         });
         document.getElementById('unit-price').value = '';
