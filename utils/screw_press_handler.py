@@ -31,18 +31,9 @@ class ScrewPressHandler:
 
         if not self.file_path.exists():
             logger.error(f"Excel file not found at: {self.file_path}")
-            sample_data = (
-                "Example data format:\n"
-                "| Item Name (MD 300 Series) | Manufacturer | Mivalt Part Number | GDS Part No | Power | Material | Lead Time | Cost (Euro) | Cost USD | Customer 100% |\n"
-                "|---------------------------|--------------|-------------------|-------------|-------|----------|-----------|-------------|-----------|---------------|\n"
-                "| Screw Press Model A       | ACME Corp    | MVT-001           | GDS-001     | 500W  | Steel    | 2 weeks   | 1000        | 1200     | 2000          |"
-            )
             raise FileNotFoundError(
                 f"Excel file not found at: {self.file_path}\n"
-                "Please place the Excel file in the 'data' folder with the following structure:\n"
-                f"Required columns: {', '.join(sorted(self.required_columns))}\n"
-                f"Sheet name: {self.sheet_name}\n\n"
-                f"{sample_data}"
+                "Please upload the Excel file first."
             )
 
         try:
@@ -64,7 +55,9 @@ class ScrewPressHandler:
 
             df = pd.read_excel(
                 self.file_path,
-                sheet_name=self.sheet_name
+                sheet_name=self.sheet_name,
+                na_values=['', 'NA', 'N/A'],  # Add more NA values if needed
+                keep_default_na=True
             )
 
             # Log found columns
@@ -75,17 +68,53 @@ class ScrewPressHandler:
             if missing_columns:
                 logger.error(f"Missing columns: {missing_columns}")
                 raise ValueError(
-                    f"Missing required columns in Excel sheet:\n"
-                    f"{', '.join(missing_columns)}\n\n"
-                    f"Please ensure your Excel file contains all required columns."
+                    f"Missing required columns in Excel sheet: {', '.join(missing_columns)}"
                 )
 
-            # Remove any rows where all required fields are empty
-            df = df.dropna(how='all', subset=list(self.required_columns))
+            # Remove any rows where the name is empty
+            df = df.dropna(subset=['Item Name (MD 300 Series)'], how='any')
 
-            logger.info(f"Successfully processed {len(df)} rows of data")
+            # Clean and standardize the data
+            df = df.assign(
+                Manufacturer=df['Manufacturer'].fillna('Not Specified').astype(str),
+                Mivalt_Part_Number=df['Mivalt Part Number'].fillna('-').astype(str),
+                GDS_Part_No=df['GDS Part No'].fillna('-').astype(str),
+                Power=df['Power'].fillna('Not Specified').astype(str),
+                Material=df['Material'].fillna('Not Specified').astype(str),
+                Lead_Time=df['Lead Time'].fillna('Not Specified').astype(str)
+            )
+
+            # Convert numeric columns with proper error handling
+            for col in ['Cost (Euro)', 'Cost USD', 'Customer 100%']:
+                df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0.0)
+
+            # Convert to records with proper formatting
+            records = []
+            for _, row in df.iterrows():
+                record = {
+                    'Item Name (MD 300 Series)': str(row['Item Name (MD 300 Series)']),
+                    'Manufacturer': str(row['Manufacturer']),
+                    'Mivalt Part Number': str(row['Mivalt Part Number']),
+                    'GDS Part No': str(row['GDS Part No']),
+                    'Power': str(row['Power']),
+                    'Material': str(row['Material']),
+                    'Lead Time': str(row['Lead Time']),
+                    'Cost (Euro)': float(row['Cost (Euro)']),
+                    'Cost USD': float(row['Cost USD']),
+                    'Customer 100%': float(row['Customer 100%'])
+                }
+                records.append(record)
+
+            logger.info(f"Successfully processed {len(records)} rows of data")
+
+            # Log first record for debugging
+            if records:
+                logger.debug(f"Sample record: {records[0]}")
+            else:
+                logger.warning("No valid records found in the Excel file")
+
             return {
-                'screw_presses': df.to_dict('records')
+                'screw_presses': records
             }
 
         except pd.errors.EmptyDataError:
@@ -98,8 +127,7 @@ class ScrewPressHandler:
                 logger.error(f"Sheet '{self.sheet_name}' not found. Available sheets: {available_sheets}")
                 raise Exception(
                     f"Sheet '{self.sheet_name}' not found in the Excel file.\n"
-                    f"Available sheets: {available_sheets}\n"
-                    "Please ensure the sheet name matches exactly."
+                    f"Available sheets: {available_sheets}"
                 )
             logger.error(f"Error reading Excel file: {str(e)}")
             raise Exception(f"Error reading Excel file: {str(e)}")
