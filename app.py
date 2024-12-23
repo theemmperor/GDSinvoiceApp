@@ -1,22 +1,44 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for, flash
 from utils.screw_press_handler import ScrewPressHandler
 import os
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+app.secret_key = 'your-secret-key-here'  # Required for flash messages
 
-# Configure upload folders for macOS
+# Configure upload folders
+UPLOAD_FOLDER = 'data'
 IMAGE_FOLDER = os.path.expanduser('~/Desktop/invoice_images')
 LOGO_FOLDER = os.path.join(IMAGE_FOLDER, 'logos')
 
 # Create required directories if they don't exist
-for folder in [IMAGE_FOLDER, LOGO_FOLDER]:
+for folder in [UPLOAD_FOLDER, IMAGE_FOLDER, LOGO_FOLDER]:
     os.makedirs(folder, exist_ok=True)
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return render_template('upload.html', error='No file selected')
+
+        file = request.files['file']
+        if file.filename == '':
+            return render_template('upload.html', error='No file selected')
+
+        if file and file.filename.endswith('.xlsx'):
+            filename = 'Mivalt Parts List - Master List (rev 7.7.22).xlsx'
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
+            file.save(file_path)
+            return render_template('upload.html', success='File uploaded successfully!')
+        else:
+            return render_template('upload.html', error='Invalid file type. Please upload an Excel file (.xlsx)')
+
+    return render_template('upload.html')
 
 @app.route('/get_product_data')
 def get_product_data():
