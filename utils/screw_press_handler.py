@@ -4,7 +4,7 @@ from pathlib import Path
 
 class ScrewPressHandler:
     def __init__(self):
-        self.file_path = Path("/Users/amysheehan/Spencer Folder/Mivalt Parts List - Master List (rev 7.7.22).xlsx")
+        self.file_path = Path("data/Mivalt Parts List - Master List (rev 7.7.22).xlsx")
         self.sheet_name = "Screw Presses"
         self.required_columns = {
             "Item Name (MD 300 Series)",
@@ -16,15 +16,28 @@ class ScrewPressHandler:
             "Lead Time",
             "Cost (Euro)",
             "Cost USD",
-            "Customer 100%"
+            "Customer 100%",
+            "Customer 100% 2"  # Added second Customer 100% column
         }
 
     def read_sheet_data(self):
         """Reads Screw Presses sheet from Excel file and returns data as dictionary"""
+        # Create data directory if it doesn't exist
+        os.makedirs(os.path.dirname(self.file_path), exist_ok=True)
+
         if not self.file_path.exists():
+            sample_data = (
+                "Example data format:\n"
+                "| Item Name (MD 300 Series) | Manufacturer | Mivalt Part Number | GDS Part No | Power | Material | Lead Time | Cost (Euro) | Cost USD | Customer 100% | Customer 100% 2 |\n"
+                "|---------------------------|--------------|-------------------|-------------|-------|----------|-----------|-------------|-----------|---------------|----------------|\n"
+                "| Screw Press Model A       | ACME Corp    | MVT-001           | GDS-001     | 500W  | Steel    | 2 weeks   | 1000        | 1200     | 2000          | 2500           |"
+            )
             raise FileNotFoundError(
                 f"Excel file not found at: {self.file_path}\n"
-                "Please ensure the file exists and has the correct permissions."
+                "Please place the Excel file in the 'data' folder with the following structure:\n"
+                f"Required columns: {', '.join(sorted(self.required_columns))}\n"
+                f"Sheet name: {self.sheet_name}\n\n"
+                f"{sample_data}"
             )
 
         try:
