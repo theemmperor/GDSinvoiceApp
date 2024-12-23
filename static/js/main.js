@@ -7,6 +7,19 @@ async function loadExcelData() {
         if (data.success) {
             populateFormFields(data.data);
         } else {
+            // Display error in a user-friendly way
+            const productSelect = document.getElementById('product-select');
+            const productDetails = document.getElementById('product-details');
+
+            productSelect.innerHTML = '<option value="">Unable to load screw press data</option>';
+            productSelect.disabled = true;
+
+            // Show error message to user
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = data.error || 'Error loading Excel data. Please ensure the Excel file is properly configured and try again.';
+            productDetails.parentElement.insertBefore(errorDiv, productDetails);
+
             console.error('Error loading Excel data:', data.error);
         }
     } catch (error) {
@@ -19,25 +32,45 @@ function populateFormFields(data) {
     const productSelect = document.getElementById('product-select');
 
     // Clear existing options
-    productSelect.innerHTML = '<option value="">Select a product...</option>';
+    productSelect.innerHTML = '<option value="">Select a screw press...</option>';
 
     // Populate products dropdown
     data.screw_presses.forEach(product => {
         const option = document.createElement('option');
         option.value = product['Mivalt Part Number'];
-        option.textContent = `${product['Item Name (MD 300 Series)']} - ${product['Manufacturer']}`;
-        option.dataset.price = product['Cost USD'];
+        option.textContent = `${product['Item Name (MD 300 Series)']}`;
+        // Store all product details in dataset
+        Object.keys(product).forEach(key => {
+            option.dataset[key.toLowerCase().replace(/[()]/g, '').replace(/\s+/g, '_')] = product[key];
+        });
         productSelect.appendChild(option);
     });
 
-    // Add change event to update price when product is selected
+    // Add change event to update details when product is selected
     productSelect.addEventListener('change', function() {
         const selectedOption = this.options[this.selectedIndex];
-        if (selectedOption.dataset.price) {
-            document.getElementById('unit-price').value = selectedOption.dataset.price;
-            calculateTotal();
-        }
+        updateProductDetails(selectedOption);
     });
+}
+
+// Update product details in the form
+function updateProductDetails(selectedOption) {
+    if (selectedOption.value) {
+        document.getElementById('manufacturer').textContent = selectedOption.dataset.manufacturer || '-';
+        document.getElementById('part-number').textContent = selectedOption.dataset.mivalt_part_number || '-';
+        document.getElementById('material').textContent = selectedOption.dataset.material || '-';
+        document.getElementById('power').textContent = selectedOption.dataset.power || '-';
+        document.getElementById('lead-time').textContent = selectedOption.dataset.lead_time || '-';
+        document.getElementById('unit-price').value = selectedOption.dataset.cost_usd || '';
+        calculateTotal();
+    } else {
+        // Reset fields if no option selected
+        ['manufacturer', 'part-number', 'material', 'power', 'lead-time'].forEach(id => {
+            document.getElementById(id).textContent = '-';
+        });
+        document.getElementById('unit-price').value = '';
+        document.getElementById('total-amount').value = '';
+    }
 }
 
 // Handle image preview
@@ -68,6 +101,6 @@ document.addEventListener('DOMContentLoaded', function() {
     loadExcelData();
 
     // Add event listeners
-    document.getElementById('quantity').addEventListener('change', calculateTotal);
-    document.getElementById('unit-price').addEventListener('change', calculateTotal);
+    document.getElementById('quantity').addEventListener('input', calculateTotal);
+    document.getElementById('unit-price').addEventListener('input', calculateTotal);
 });

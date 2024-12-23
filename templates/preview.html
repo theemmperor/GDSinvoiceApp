@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Preview</title>
+    <title>Screw Press Invoice Preview</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
@@ -17,7 +17,7 @@
                     <h2>{{ data['company-name'] }}</h2>
                     <p>{{ data['company-address'] }}</p>
                 </div>
-                
+
                 <div class="invoice-info">
                     <h2>INVOICE</h2>
                     <p>Invoice #: {{ data['invoice-number'] }}</p>
@@ -25,23 +25,22 @@
                 </div>
             </div>
 
-            <div class="customer-info">
-                <h3>Bill To:</h3>
-                <p>{{ data['customer-select'] }}</p>
-            </div>
-
             <table class="invoice-items">
                 <thead>
                     <tr>
-                        <th>Product</th>
+                        <th>Screw Press</th>
+                        <th>Part Number</th>
+                        <th>Manufacturer</th>
                         <th>Quantity</th>
-                        <th>Unit Price</th>
+                        <th>Unit Price (USD)</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>{{ data['product-select'] }}</td>
+                        <td>{{ data['part-number'] }}</td>
+                        <td>{{ data['manufacturer'] }}</td>
                         <td>{{ data['quantity'] }}</td>
                         <td>${{ data['unit-price'] }}</td>
                         <td>${{ data['total-amount'] }}</td>
@@ -57,7 +56,7 @@
                 <h3>Terms and Conditions</h3>
                 <p>{{ data['terms'] }}</p>
             </div>
-            
+
             <button onclick="window.print()" class="btn">Print Invoice</button>
             <button onclick="window.history.back()" class="btn">Back to Form</button>
         </div>

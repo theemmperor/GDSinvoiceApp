@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Proposal System</title>
+    <title>Screw Press Invoice System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Invoice Proposal System</h1>
+        <h1>Screw Press Invoice System</h1>
 
         <form action="{{ url_for('preview') }}" method="POST" enctype="multipart/form-data">
             <!-- Company Information -->
@@ -34,16 +34,25 @@
                 <label for="invoice-date">Invoice Date:</label>
                 <input type="date" id="invoice-date" name="invoice-date" required>
 
-                <label for="product-select">Select Product:</label>
+                <label for="product-select">Select Screw Press:</label>
                 <select id="product-select" name="product-select" required>
-                    <option value="">Select a product...</option>
+                    <option value="">Select a screw press...</option>
                 </select>
+
+                <label for="product-details">Product Details:</label>
+                <div id="product-details" class="product-info">
+                    <p>Manufacturer: <span id="manufacturer">-</span></p>
+                    <p>Part Number: <span id="part-number">-</span></p>
+                    <p>Material: <span id="material">-</span></p>
+                    <p>Power: <span id="power">-</span></p>
+                    <p>Lead Time: <span id="lead-time">-</span></p>
+                </div>
 
                 <label for="quantity">Quantity:</label>
                 <input type="number" id="quantity" name="quantity" min="1" required>
 
                 <label for="unit-price">Unit Price (USD):</label>
-                <input type="number" id="unit-price" name="unit-price" step="0.01" required>
+                <input type="number" id="unit-price" name="unit-price" step="0.01" required readonly>
 
                 <label for="total-amount">Total Amount:</label>
                 <input type="text" id="total-amount" name="total-amount" readonly>
