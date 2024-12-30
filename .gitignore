@@ -36,6 +36,7 @@ ENV/
 
 # Logs
 *.log
+app.log
 
 # Local development
 .env
@@ -49,3 +50,8 @@ ENV/
 # Uploaded files
 data/
 static/images/logos/
+
+# Replit specific
+.replit
+replit.nix
+.config/
